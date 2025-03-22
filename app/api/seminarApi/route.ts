@@ -2,8 +2,9 @@ import SeminarModel from "@/app/schema/SeminarModel";
 import { Database } from "@/lib/database";
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic"; // ✅ Fix: Force dynamic API route
+export const dynamic = "force-dynamic"; // ✅ Force dynamic API route
 
+// ✅ POST: Create a Seminar
 export async function POST(req: Request) {
     try {
         await Database();
@@ -24,8 +25,10 @@ export async function POST(req: Request) {
             { status: 201 }
         );
     } catch (err) {
+        console.error("❌ Error submitting seminar:", err);
+        const errorMessage = err instanceof Error ? err.message : "Unknown error";
         return NextResponse.json(
-            { message: "Server error", error: err },
+            { message: "Server error", error: errorMessage },
             { status: 500 }
         );
     }
@@ -39,8 +42,10 @@ export async function GET() {
 
         return NextResponse.json({ data: seminars }, { status: 200 });
     } catch (error) {
+        console.error("❌ Error fetching seminars:", error);
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
         return NextResponse.json(
-            { message: "Failed to fetch seminars", error },
+            { message: "Failed to fetch seminars", error: errorMessage },
             { status: 500 }
         );
     }
